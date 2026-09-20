@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="An interactive supermarket-inspired personal portfolio." />
+    <meta name="theme-color" content="#ffc6d9" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23ffc6d9'/%3E%3Cpath d='M7 8h3l2 12h11l2-8H12M14 25h.1M22 25h.1' fill='none' stroke='%23181818' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <title>What's In My Cart? — Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to portfolio</a>
+
+    <div class="pixel-noise" aria-hidden="true"></div>
+
+    <header class="site-header" aria-label="Site controls">
+      <button class="brand-mark" type="button" data-return-intro aria-label="Return to store entrance">
+        <span class="brand-dot"></span>
+        <span data-site-name>YI WEN'S MINI MART</span>
+      </button>
+      <button class="radio-toggle" type="button" aria-pressed="false" data-radio>
+        <span class="radio-light" aria-hidden="true"></span>
+        <span>STORE RADIO: <strong>OFF</strong></span>
+      </button>
+    </header>
+
+    <aside class="radio-panel" data-radio-panel hidden aria-label="Store Radio player">
+      <div class="radio-panel-heading"><strong>STORE RADIO</strong><span aria-hidden="true">♪</span></div>
+      <span class="radio-mode">MUSIC + CHATTER</span>
+      <p class="sr-only" data-radio-status role="status">Loading your track…</p>
+    </aside>
+    <div class="radio-video" data-radio-video hidden>
+      <div id="store-youtube-player"></div>
+    </div>
+
+    <main id="main-content">
+      <section class="intro-screen is-active" data-screen="intro" aria-labelledby="intro-title">
+        <div class="entrance-sign sticker-parallax" data-depth="0.35" aria-hidden="true">OPEN<br />DAILY</div>
+        <div class="cute-sticker" aria-hidden="true">♡ HI HI ♡</div>
+        <div class="manager-stage">
+          <div class="photo-frame">
+            <img data-manager-photo alt="" />
+            <div class="photo-placeholder" data-photo-placeholder>
+              <span>YOUR CASUAL PHOTO</span>
+              <small>Replace in portfolio-data.js</small>
+            </div>
+            <span class="manager-badge">STORE MANAGER</span>
+          </div>
+
+          <div class="dialogue-panel">
+            <span class="welcome-bubble">WELCOME IN ♡</span>
+            <p class="eyebrow">A QUICK NOTE FROM YOUR STORE MANAGER</p>
+            <h1 id="intro-title" data-dialogue-title>Hi, I'm Yi Wen.</h1>
+            <p class="dialogue-copy" data-dialogue-copy>
+              I'm your 2D store manager. Thanks for stopping by.
+            </p>
+            <div class="dialogue-controls">
+              <span class="dialogue-count" data-dialogue-count>01 / 02</span>
+              <span class="dialogue-hint">SPACE / ENTER</span>
+              <button class="primary-button" type="button" data-dialogue-next aria-label="Advance the introduction">Keep going <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-overview" aria-label="Portfolio overview">
+          <span class="overview-label">QUICK LOOK</span>
+          <div data-overview-tags></div>
+        </div>
+      </section>
+
+      <section class="shop-screen" data-screen="shop" aria-labelledby="shop-title" hidden>
+        <button class="back-button" type="button" data-return-intro>← Back to entrance</button>
+        <div class="shop-heading">
+          <div>
+            <p class="eyebrow">AISLE 01 · PERSONAL INVENTORY</p>
+            <h2 id="shop-title">WHAT'S IN MY CART?</h2>
+          </div>
+            <p class="shop-instruction">Pick a card to explore — follow your curiosity.</p>
+        </div>
+
+        <div class="shop-layout">
+          <section class="cart-zone" aria-label="Interactive portfolio cart">
+            <div class="special-burst burst-cyan sticker-parallax" data-depth="0.55" aria-hidden="true">FRESH<br />WORK</div>
+            <div class="special-burst burst-yellow sticker-parallax" data-depth="0.75" aria-hidden="true"><span data-find-count>9</span>FINDS</div>
+            <div class="cart-scene">
+              <img class="cart-base" src="assets/top-down-cart.png" alt="Top-down pink supermarket shopping cart" />
+              <div class="cart-items" data-cart-items></div>
+              <div class="plus-one" data-plus-one aria-hidden="true">+1 FOUND!</div>
+            </div>
+            <p class="cart-caption">CLICK AN ITEM · HEAR THE BEEP · KEEP EXPLORING</p>
+          </section>
+
+          <aside class="receipt-panel" aria-labelledby="receipt-title">
+            <div class="receipt-tear" aria-hidden="true"></div>
+            <p class="receipt-store">YI WEN'S MINI MART</p>
+            <h3 id="receipt-title">YOUR RECEIPT</h3>
+            <p class="receipt-meta">ORDER #0001 · <span data-today></span></p>
+            <ol class="receipt-list" data-receipt-list></ol>
+            <div class="receipt-total">
+              <span>ITEMS FOUND</span>
+              <strong><span data-collected>0</span> / <span data-total>8</span></strong>
+            </div>
+            <div class="progress-track" role="progressbar" aria-label="Portfolio categories explored" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0" data-progress>
+              <span></span>
+            </div>
+            <button class="checkout-button" type="button" data-checkout disabled>
+              <span>CHECKOUT</span>
+              <small>EXPLORE ALL ITEMS FIRST</small>
+            </button>
+            <p class="receipt-thanks">THANK YOU FOR BROWSING ♡</p>
+            <div class="receipt-barcode" aria-hidden="true"></div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="content-modal" data-modal aria-labelledby="modal-title">
+      <button class="modal-close" type="button" data-modal-close aria-label="Close details">×</button>
+      <div class="modal-accent" data-modal-accent></div>
+      <div class="modal-body">
+        <button class="back-button" type="button" data-back-cart>← Back to main menu</button>
+        <div class="modal-kicker"><span data-modal-number></span><span data-modal-tag></span></div>
+        <h2 id="modal-title" data-modal-title></h2>
+        <p class="modal-summary" data-modal-summary></p>
+        <div class="modal-metric" data-modal-metric></div>
+        <div class="modal-grid">
+          <div>
+            <p class="modal-label">SELECTED SHELF</p>
+            <div class="entry-list" data-modal-entries></div>
+          </div>
+          <div class="modal-image-slot" data-modal-image>
+            <span>ADD A CRISP<br />PROJECT IMAGE</span>
+            <small>Set image in portfolio-data.js</small>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="checkout-modal" data-checkout-modal aria-labelledby="checkout-title">
+      <button class="modal-close" type="button" data-checkout-close aria-label="Close checkout">×</button>
+      <div class="checkout-inner">
+        <button class="back-button" type="button" data-back-cart>← Back to main menu</button>
+        <p class="eyebrow">CART FULL · ORDER COMPLETE</p>
+        <h2 id="checkout-title">LET'S MAKE<br />SOMETHING GOOD.</h2>
+        <p data-contact-copy>You've seen the shelves. If something caught your eye, I'd love to hear from you.</p>
+        <div class="checkout-actions">
+          <a class="primary-button" data-email-link href="mailto:hello@example.com">Email me <span aria-hidden="true">↗</span></a>
+          <a class="secondary-button" data-resume-link href="#" target="_blank" rel="noreferrer">Open résumé</a>
+        </div>
+        <div class="checkout-receipt">TOTAL: <span data-story-count>9</span> STORIES · PAYMENT: ONE HELLO</div>
+      </div>
+    </dialog>
+
+    <div class="receipt-loader" data-loader hidden aria-live="polite">
+      <div class="loader-paper">
+        <span>SCANNING ITEM...</span>
+        <div></div><div></div><div></div>
+      </div>
+    </div>
+
+    <script src="portfolio-data.js"></script>
+    <script src="radio.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

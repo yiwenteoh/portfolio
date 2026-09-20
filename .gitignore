@@ -1,0 +1,6 @@
+.sites-runtime/
+work/
+*.tar.gz
+.DS_Store
+.vercel/
+.env*

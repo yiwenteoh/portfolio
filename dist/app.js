@@ -1,0 +1,233 @@
+(function () {
+  'use strict';
+
+  const data = window.PORTFOLIO_DATA;
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const collected = new Set();
+  let dialogueIndex = 0;
+  let audioContext = null;
+  let dialogueChatter = null;
+  let chatterStopTimer = null;
+
+  const intro = $('[data-screen="intro"]');
+  const shop = $('[data-screen="shop"]');
+  const modal = $('[data-modal]');
+  const checkoutModal = $('[data-checkout-modal]');
+  const itemContainer = $('[data-cart-items]');
+  const receiptList = $('[data-receipt-list]');
+  const checkoutButton = $('[data-checkout]');
+  const progress = $('[data-progress]');
+  const plusOne = $('[data-plus-one]');
+
+  function init() {
+    $$('[data-site-name]').forEach((el) => { el.textContent = data.siteName; });
+    $('[data-today]').textContent = new Intl.DateTimeFormat('en', { month: 'short', day: '2-digit', year: 'numeric' }).format(new Date()).toUpperCase();
+    $('[data-total]').textContent = data.categories.length;
+    $('[data-find-count]').textContent = data.categories.length;
+    $('[data-story-count]').textContent = data.categories.length;
+    progress.setAttribute('aria-valuemax', data.categories.length);
+    $('[data-email-link]').href = `mailto:${data.email}`;
+    $('[data-resume-link]').href = data.resumeUrl || '#';
+    $('[data-overview-tags]').innerHTML = (data.overviewTags || []).slice(0, 4).map((tag) => `<span>${tag}</span>`).join('');
+
+    if (data.managerPhoto) {
+      const image = $('[data-manager-photo]');
+      image.src = data.managerPhoto;
+      image.alt = 'Yi Wen, store manager of this portfolio';
+      image.style.display = 'block';
+      $('[data-photo-placeholder]').hidden = true;
+    }
+
+    renderDialogue();
+    renderItems();
+    renderReceipt();
+    wireEvents();
+  }
+
+  function renderDialogue() {
+    const step = data.dialogue[dialogueIndex];
+    $('[data-dialogue-title]').textContent = step.title;
+    $('[data-dialogue-copy]').textContent = step.copy;
+    $('[data-dialogue-count]').textContent = `${String(dialogueIndex + 1).padStart(2, '0')} / ${String(data.dialogue.length).padStart(2, '0')}`;
+    $('[data-dialogue-next]').innerHTML = dialogueIndex === data.dialogue.length - 1
+      ? 'Proceed <span aria-hidden="true">→</span>'
+      : 'Keep going <span aria-hidden="true">→</span>';
+  }
+
+  // Reuse the existing chatter asset for a brief, user-triggered conversational cue.
+  // The Store Radio implementation remains unchanged and still owns continuous ambience.
+  function playDialogueChatter() {
+    if (!data.audio?.chatter) return;
+    dialogueChatter ||= new Audio(data.audio.chatter);
+    dialogueChatter.volume = Math.min(Number(data.audio.chatterVolume || 0.055), 0.12);
+    dialogueChatter.currentTime = 0;
+    clearTimeout(chatterStopTimer);
+    dialogueChatter.play().catch(() => {});
+    chatterStopTimer = window.setTimeout(() => dialogueChatter.pause(), 850);
+  }
+
+  function renderItems() {
+    itemContainer.innerHTML = data.categories.map((category, index) => `
+      <button class="cart-item ${category.featured ? 'is-featured' : ''}" type="button" data-category="${category.id}" style="--item-color:${category.color};--tilt:${[-3, 2, -1, 3, -2, 2, -3, 1][index] || 0}deg" aria-label="Explore ${category.label}">
+        <span class="item-label">${category.shortLabel}</span>
+        <span class="item-icon" aria-hidden="true">${category.icon}</span>
+      </button>
+    `).join('');
+  }
+
+  function renderReceipt() {
+    receiptList.innerHTML = data.categories.map((category) => `
+      <li class="${collected.has(category.id) ? '' : 'placeholder'}">
+        <span>${collected.has(category.id) ? category.shortLabel : '— — —'}</span>
+        <span>${collected.has(category.id) ? 'FOUND' : '$0.00'}</span>
+      </li>
+    `).join('');
+    $('[data-collected]').textContent = collected.size;
+    progress.setAttribute('aria-valuenow', collected.size);
+    $('span', progress).style.width = `${(collected.size / data.categories.length) * 100}%`;
+    const full = collected.size === data.categories.length;
+    checkoutButton.disabled = !full;
+    checkoutButton.innerHTML = full
+      ? '<span>CART FULL — CHECKOUT</span><small>SAY HELLO AT THE COUNTER</small>'
+      : '<span>CHECKOUT</span><small>EXPLORE ALL ITEMS FIRST</small>';
+  }
+
+  function enterShop() {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    playStoreBell();
+    intro.classList.remove('is-active');
+    intro.hidden = true;
+    shop.hidden = false;
+    shop.classList.add('is-active');
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => window.scrollTo(0, 0)));
+    if (!reducedMotion) shop.animate([{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }], { duration: 500, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    $('#shop-title').focus?.();
+  }
+
+  function openCategory(category) {
+    const isNew = !collected.has(category.id);
+    playBeep();
+    $('[data-loader]').hidden = false;
+    window.setTimeout(() => {
+      $('[data-loader]').hidden = true;
+      fillModal(category);
+      modal.showModal();
+      if (isNew) {
+        collected.add(category.id);
+        $(`[data-category="${category.id}"]`).classList.add('is-collected');
+        plusOne.classList.remove('pop');
+        void plusOne.offsetWidth;
+        plusOne.classList.add('pop');
+        renderReceipt();
+      }
+    }, reducedMotion ? 0 : 430);
+  }
+
+  function fillModal(category) {
+    $('[data-modal-accent]').style.background = category.color;
+    $('[data-modal-number]').textContent = String(data.categories.findIndex((item) => item.id === category.id) + 1).padStart(2, '0');
+    $('[data-modal-tag]').textContent = category.tag;
+    $('[data-modal-title]').textContent = category.label;
+    $('[data-modal-summary]').textContent = category.summary;
+    $('[data-modal-metric]').textContent = category.metric;
+    $('[data-modal-entries]').innerHTML = category.entries.map((entry) => `
+      <article class="entry-card">
+        <h3>${entry.title}</h3>
+        <p class="meta">${entry.meta}</p>
+        <p>${entry.text}</p>
+      </article>
+    `).join('');
+    const imageSlot = $('[data-modal-image]');
+    imageSlot.innerHTML = category.image
+      ? `<img src="${category.image}" alt="${category.label} portfolio highlight" />`
+      : '<span>ADD A CRISP<br />PROJECT IMAGE<small>Set image in portfolio-data.js</small></span>';
+  }
+
+  function playBeep() {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    audioContext ||= new Ctx();
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(820, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(1240, audioContext.currentTime + .06);
+    gain.gain.setValueAtTime(.0001, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.11, audioContext.currentTime + .01);
+    gain.gain.exponentialRampToValueAtTime(.0001, audioContext.currentTime + .12);
+    oscillator.connect(gain).connect(audioContext.destination);
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + .13);
+  }
+
+  function playStoreBell() {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    audioContext ||= new Ctx();
+    audioContext.resume?.().catch(() => {});
+    const now = audioContext.currentTime;
+    [[1046.5, 0], [1318.5, .14]].forEach(([frequency, offset]) => {
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(frequency, now + offset);
+      gain.gain.setValueAtTime(.0001, now + offset);
+      gain.gain.exponentialRampToValueAtTime(.14, now + offset + .015);
+      gain.gain.exponentialRampToValueAtTime(.0001, now + offset + .72);
+      oscillator.connect(gain).connect(audioContext.destination);
+      oscillator.start(now + offset);
+      oscillator.stop(now + offset + .75);
+    });
+  }
+
+  function wireEvents() {
+    const advanceDialogue = () => {
+      playDialogueChatter();
+      if (dialogueIndex < data.dialogue.length - 1) {
+        dialogueIndex += 1;
+        renderDialogue();
+      } else enterShop();
+    };
+    $('[data-dialogue-next]').addEventListener('click', advanceDialogue);
+    window.addEventListener('keydown', (event) => {
+      if (intro.hidden || (event.key !== ' ' && event.key !== 'Enter')) return;
+      if (event.target instanceof HTMLElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) return;
+      event.preventDefault();
+      advanceDialogue();
+    });
+    itemContainer.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-category]');
+      if (!button) return;
+      openCategory(data.categories.find((item) => item.id === button.dataset.category));
+    });
+    $('[data-modal-close]').addEventListener('click', () => modal.close());
+    $('[data-checkout-close]').addEventListener('click', () => checkoutModal.close());
+    $$('[data-back-cart]').forEach((button) => button.addEventListener('click', () => {
+      modal.close();
+      checkoutModal.close();
+    }));
+    modal.addEventListener('click', (event) => { if (event.target === modal) modal.close(); });
+    checkoutModal.addEventListener('click', (event) => { if (event.target === checkoutModal) checkoutModal.close(); });
+    checkoutButton.addEventListener('click', () => { playBeep(); checkoutModal.showModal(); });
+    $('[data-radio]').addEventListener('click', () => window.StoreRadio.toggle());
+    $$('[data-return-intro]').forEach((button) => button.addEventListener('click', () => {
+      shop.hidden = true;
+      intro.hidden = false;
+      intro.classList.add('is-active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }));
+
+    if (!reducedMotion && window.matchMedia('(pointer:fine)').matches) {
+      window.addEventListener('pointermove', (event) => {
+        $$('[data-depth]').forEach((sticker) => {
+          const depth = Number(sticker.dataset.depth || .3);
+          sticker.style.translate = `${(event.clientX / innerWidth - .5) * 12 * depth}px ${(event.clientY / innerHeight - .5) * 12 * depth}px`;
+        });
+      });
+    }
+  }
+
+  init();
+})();
