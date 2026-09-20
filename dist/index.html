@@ -26,11 +26,15 @@
     </header>
 
     <aside class="radio-panel" data-radio-panel hidden aria-label="Store Radio player">
-      <div class="radio-panel-heading"><strong>STORE RADIO</strong><span aria-hidden="true">♪</span></div>
+      <div class="radio-panel-heading"><strong>STORE RADIO</strong><button type="button" data-radio-close aria-label="Close audio controls">×</button></div>
       <span class="radio-mode">MUSIC + CHATTER</span>
-      <p class="sr-only" data-radio-status role="status">Loading your track…</p>
+      <p data-radio-status role="status">Loading your track…</p>
+      <label>Music <input data-music-volume type="range" min="0" max="100" value="22" /><output data-music-output>22%</output></label>
+      <label>Chatter <input data-chatter-volume type="range" min="0" max="20" step="0.5" value="5.5" /></label>
+      <div class="radio-actions"><button type="button" data-radio-stop>Turn audio off</button><button type="button" data-radio-player>Show player</button></div>
     </aside>
     <div class="radio-video" data-radio-video hidden>
+      <button type="button" data-video-close>Hide video ×</button>
       <div id="store-youtube-player"></div>
     </div>
 
@@ -75,19 +79,20 @@
             <p class="eyebrow">AISLE 01 · PERSONAL INVENTORY</p>
             <h2 id="shop-title">WHAT'S IN MY CART?</h2>
           </div>
-            <p class="shop-instruction">Pick a card to explore — follow your curiosity.</p>
+            <p class="shop-instruction">Six little stories. Start with ventures, then follow your curiosity.</p>
         </div>
 
         <div class="shop-layout">
           <section class="cart-zone" aria-label="Interactive portfolio cart">
+            <div class="interest-rail interest-left" data-interest-left aria-label="Creative interests"></div>
+            <div class="interest-rail interest-right" data-interest-right aria-label="More interests"></div>
             <div class="special-burst burst-cyan sticker-parallax" data-depth="0.55" aria-hidden="true">FRESH<br />WORK</div>
             <div class="special-burst burst-yellow sticker-parallax" data-depth="0.75" aria-hidden="true"><span data-find-count>9</span>FINDS</div>
             <div class="cart-scene">
               <img class="cart-base" src="assets/top-down-cart.png" alt="Top-down pink supermarket shopping cart" />
               <div class="cart-items" data-cart-items></div>
-              <div class="plus-one" data-plus-one aria-hidden="true">+1 FOUND!</div>
             </div>
-            <p class="cart-caption">CLICK AN ITEM · HEAR THE BEEP · KEEP EXPLORING</p>
+            <p class="cart-caption">OPEN A STORY · RETURN TO COLLECT IT</p>
           </section>
 
           <aside class="receipt-panel" aria-labelledby="receipt-title">
@@ -95,6 +100,7 @@
             <p class="receipt-store">YI WEN'S MINI MART</p>
             <h3 id="receipt-title">YOUR RECEIPT</h3>
             <p class="receipt-meta">ORDER #0001 · <span data-today></span></p>
+            <p class="receipt-update" data-receipt-update>YOUR NEXT FIND IS IN THE CART</p>
             <ol class="receipt-list" data-receipt-list></ol>
             <div class="receipt-total">
               <span>ITEMS FOUND</span>
@@ -111,6 +117,10 @@
             <div class="receipt-barcode" aria-hidden="true"></div>
           </aside>
         </div>
+        <section class="quick-look" aria-labelledby="quick-look-title">
+          <div><p class="eyebrow">THE QUICK VERSION</p><h2 id="quick-look-title" data-quick-title></h2><p data-quick-copy></p></div>
+          <div class="quick-links"><a class="primary-button" data-resume-link target="_blank" rel="noreferrer">Download résumé ↗</a><a class="secondary-button" data-email-link>Say hello ↗</a><p>No need to finish the cart to get in touch.</p></div>
+        </section>
       </section>
     </main>
 
@@ -135,6 +145,8 @@
         </div>
       </div>
     </dialog>
+
+    <div class="collection-toast" data-plus-one role="status" aria-live="polite" aria-atomic="true" hidden></div>
 
     <dialog class="checkout-modal" data-checkout-modal aria-labelledby="checkout-title">
       <button class="modal-close" type="button" data-checkout-close aria-label="Close checkout">×</button>

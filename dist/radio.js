@@ -6,6 +6,12 @@
   const video = document.querySelector('[data-radio-video]');
   const toggle = document.querySelector('[data-radio]');
   const status = document.querySelector('[data-radio-status]');
+  const musicVolume = document.querySelector('[data-music-volume]');
+  const chatterVolume = document.querySelector('[data-chatter-volume]');
+  const musicOutput = document.querySelector('[data-music-output]');
+  musicVolume.value = config.musicVolume;
+  musicOutput.value = `${config.musicVolume}%`;
+  chatterVolume.value = config.chatterVolume * 100;
   let wanted = false;
   let player;
   let ready = false;
@@ -111,14 +117,14 @@
   async function start() {
     wanted = true;
     panel.hidden = false;
-    label('ON');
+    label('LOADING');
     status.textContent = 'Loading your track…';
     prepareChatter();
     clearTimeout(loadTimer);
     loadTimer = setTimeout(() => {
       if (wanted && !playing) {
-        label('ON');
-        status.textContent = 'YouTube has not started. Press Play if it appears; if the player stays blank, try this site in your regular browser.';
+        label('WAITING');
+        status.textContent = 'Music is waiting. Choose Show player and press Play if needed.';
       }
     }, 10000);
     try {
@@ -134,7 +140,7 @@
             ready = true;
             event.target.getIframe().title = 'Store Radio — selected YouTube track';
             event.target.getIframe().removeAttribute('allowfullscreen');
-            event.target.setVolume(Number(config.musicVolume));
+            event.target.setVolume(Number(musicVolume.value));
             if (wanted) event.target.playVideo();
           },
           onStateChange(event) {
@@ -147,23 +153,35 @@
               scheduleChatter(true);
             } else {
               stopChatter();
-              label('ON');
-              status.textContent = event.data === 2 ? 'Music paused · chatter remains ready.' : 'Music loading · chatter is on.';
+              label(event.data === 2 ? 'PAUSED' : 'LOADING');
+              status.textContent = event.data === 2 ? 'Music paused. Show player to resume.' : 'Music loading…';
             }
           },
-          onAutoplayBlocked() { if (wanted) { label('ON'); status.textContent = 'Chatter is on; music is waiting for browser playback.'; } },
+          onAutoplayBlocked() { if (wanted) { label('PLAY'); status.textContent = 'Choose Show player and press Play once. You can hide it afterwards.'; } },
           onError() { fail('YouTube could not play this track here. Try the YouTube link below, or switch Store Radio on to retry.'); }
         }
       });
     } catch (_) { fail('YouTube could not load. Check your connection and turn Store Radio on to retry.'); }
   }
 
+  musicVolume.addEventListener('input', () => {
+    musicOutput.value = `${musicVolume.value}%`;
+    if (ready) { player.setVolume(Number(musicVolume.value)); if (Number(musicVolume.value) > 0) player.unMute(); }
+  });
+  chatterVolume.addEventListener('input', () => {
+    chatterLevel = Number(chatterVolume.value) / 100;
+    stopChatter(); scheduleChatter(true);
+  });
+  document.querySelector('[data-radio-close]').addEventListener('click', () => { panel.hidden = true; toggle.focus(); });
+  document.querySelector('[data-radio-stop]').addEventListener('click', stop);
+  document.querySelector('[data-radio-player]').addEventListener('click', () => { video.hidden = !video.hidden; });
+  document.querySelector('[data-video-close]').addEventListener('click', () => { video.hidden = true; });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) stopChatter(); else scheduleChatter();
   });
   window.addEventListener('pagehide', stop);
   window.StoreRadio = { toggle: () => {
     if (!wanted) start();
-    else stop();
+    else panel.hidden = !panel.hidden;
   } };
 })();

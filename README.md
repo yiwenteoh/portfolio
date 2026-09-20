@@ -27,7 +27,7 @@ The file contains comments and obvious placeholders. Put your files in `dist/ass
 
 ## Store Radio
 
-The `audio` section in `dist/portfolio-data.js` selects YouTube video `vxPrlc2rtuk` and controls the background audio settings. Radio starts off; click the same Store Radio button to turn Music + Chatter on or off. Internet access and permission from the video's owner to embed it are required. The music remains on YouTube.
+The `audio` section in `dist/portfolio-data.js` selects YouTube video `vxPrlc2rtuk` and controls the background audio settings. Radio starts off. Click Store Radio to start it and open its controls. The Music slider adjusts music volume; Chatter adjusts the ambient layer. Close the controls with × without stopping playback, and click Store Radio to reopen them. Use “Turn audio off” to stop both layers. The optional video has its own hide button. Internet access and an embeddable video are required. The music remains on YouTube.
 
 The local `dist/assets/crowd-murmur.mp3` contains real CC0 crowd chatter, played quietly for 4–7 seconds with fades and 18–35 seconds between snippets. Credits are in `dist/assets/AUDIO-CREDITS.md`. The player includes separate Music and Chatter sliders. Turning off the radio stops both layers.
 
@@ -36,12 +36,16 @@ The local `dist/assets/crowd-murmur.mp3` contains real CC0 crowd chatter, played
 - At the top: `siteName`, `managerPhoto`, `email`, `resumeUrl`, and the short `overviewTags` shown on the welcome screen.
 - Under `dialogue`: the two short introduction messages. Visitors can advance with the button or Space/Enter; the existing chatter asset gives each advance a brief conversational cue.
 - Under `categories`: each section's `label`, `summary`, `metric`, and `image`.
+- Under `interests`: change the emoji and label for the little craft-inspired stickers beside the cart.
+- Under `quickLook`: change the introduction below the cart. The résumé and email links here are available without completing the cart.
 - Under each category's `entries`: edit the `title`, `meta` (role/date), and `text` for each experience.
 - `entrepreneurship` is the first category. Its `featured: true` flag keeps it visually highlighted without adding extra text to the card. Add your past ventures and verified results there.
 
 Edit the words inside quotation marks, save the file, then refresh the preview. Keep surrounding commas and brackets. Image paths are relative to the `dist` folder: an image saved as `dist/assets/my-venture.jpg` is written as `"assets/my-venture.jpg"` in the content file.
 
-The cart has nine categories. Receipt totals update automatically. Back buttons close a section without resetting the receipt, and the entrance button returns to the store-manager introduction. The normal pointer remains visible inside all dialogs.
+The cart has six categories: Entrepreneurship, Work Experience, Projects & Creative, Education, Global Experiences, and About Me. Creative work and hackathons are entries within Projects & Creative. A section is collected when visitors close its window or use Back to cart; opening it again does not add it twice. A visible +1 notice and highlighted receipt row confirm each new addition. Receipt totals update automatically, and the entrance button returns to the store-manager introduction. The normal pointer remains visible inside all dialogs.
+
+The résumé is a link below the cart, not another category to unlock. Add your PDF to `dist/assets/` and set `resumeUrl` to `"assets/yiwen-resume.pdf"`. Until you replace the `"#"` placeholder, the link says “Résumé coming soon”. Replace the placeholder email before sharing the finished portfolio.
 
 If an image path is left blank, the site keeps a clearly labeled placeholder. Category modal images remain crisp while the cart uses a deliberately pixelated editorial treatment.
 

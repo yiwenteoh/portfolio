@@ -10,6 +10,9 @@
   let audioContext = null;
   let dialogueChatter = null;
   let chatterStopTimer = null;
+  let activeCategory = null;
+  let toastTimer = null;
+  let openingCategory = false;
 
   const intro = $('[data-screen="intro"]');
   const shop = $('[data-screen="shop"]');
@@ -28,8 +31,20 @@
     $('[data-find-count]').textContent = data.categories.length;
     $('[data-story-count]').textContent = data.categories.length;
     progress.setAttribute('aria-valuemax', data.categories.length);
-    $('[data-email-link]').href = `mailto:${data.email}`;
-    $('[data-resume-link]').href = data.resumeUrl || '#';
+    $$('[data-email-link]').forEach(link => { link.href = `mailto:${data.email}`; });
+    $$('[data-resume-link]').forEach(link => {
+      if (data.resumeUrl && data.resumeUrl !== '#') link.href = data.resumeUrl;
+      else { link.removeAttribute('href'); link.textContent = 'Résumé coming soon'; link.setAttribute('aria-disabled', 'true'); }
+    });
+    $('[data-quick-title]').textContent = data.quickLook.title;
+    $('[data-quick-copy]').textContent = data.quickLook.copy;
+    data.interests.forEach((interest, index) => {
+      const icon = document.createElement('span');
+      icon.className = 'interest-sticker';
+      icon.setAttribute('role', 'img'); icon.setAttribute('aria-label', interest.label);
+      icon.title = interest.label; icon.textContent = interest.icon;
+      $(index < 2 ? '[data-interest-left]' : '[data-interest-right]').append(icon);
+    });
     $('[data-overview-tags]').innerHTML = (data.overviewTags || []).slice(0, 4).map((tag) => `<span>${tag}</span>`).join('');
 
     if (data.managerPhoto) {
@@ -73,15 +88,17 @@
       <button class="cart-item ${category.featured ? 'is-featured' : ''}" type="button" data-category="${category.id}" style="--item-color:${category.color};--tilt:${[-3, 2, -1, 3, -2, 2, -3, 1][index] || 0}deg" aria-label="Explore ${category.label}">
         <span class="item-label">${category.shortLabel}</span>
         <span class="item-icon" aria-hidden="true">${category.icon}</span>
+        <span class="item-name">${category.label}</span>
+        ${category.featured ? '<span class="item-featured-tag">START HERE</span>' : ''}
       </button>
     `).join('');
   }
 
-  function renderReceipt() {
+  function renderReceipt(newId) {
     receiptList.innerHTML = data.categories.map((category) => `
-      <li class="${collected.has(category.id) ? '' : 'placeholder'}">
+      <li class="${collected.has(category.id) ? 'receipt-found' : 'placeholder'} ${category.id === newId ? 'just-collected' : ''}">
         <span>${collected.has(category.id) ? category.shortLabel : '— — —'}</span>
-        <span>${collected.has(category.id) ? 'FOUND' : '$0.00'}</span>
+        <span>${collected.has(category.id) ? '✓' : '…'}</span>
       </li>
     `).join('');
     $('[data-collected]').textContent = collected.size;
@@ -107,22 +124,38 @@
   }
 
   function openCategory(category) {
-    const isNew = !collected.has(category.id);
+    if (openingCategory || modal.open) return;
+    openingCategory = true;
+    clearTimeout(toastTimer); plusOne.hidden = true;
     playBeep();
     $('[data-loader]').hidden = false;
     window.setTimeout(() => {
       $('[data-loader]').hidden = true;
       fillModal(category);
+      activeCategory = category;
       modal.showModal();
-      if (isNew) {
-        collected.add(category.id);
-        $(`[data-category="${category.id}"]`).classList.add('is-collected');
-        plusOne.classList.remove('pop');
-        void plusOne.offsetWidth;
-        plusOne.classList.add('pop');
-        renderReceipt();
-      }
+      openingCategory = false;
     }, reducedMotion ? 0 : 430);
+  }
+
+  function collectFinishedCategory() {
+    const category = activeCategory;
+    activeCategory = null;
+    if (!category || collected.has(category.id)) return;
+    collected.add(category.id);
+    $(`[data-category="${category.id}"]`).classList.add('is-collected');
+    renderReceipt(category.id);
+    playBeep();
+    $('[data-receipt-update]').textContent = `+1 ${category.shortLabel} ADDED`;
+    plusOne.replaceChildren();
+    const count = document.createElement('strong'); count.textContent = '+1';
+    const message = document.createElement('span');
+    message.textContent = `${category.label} collected! ${collected.size} of ${data.categories.length} stories on your receipt.`;
+    const jump = document.createElement('button'); jump.type = 'button'; jump.textContent = 'See receipt ↓';
+    jump.addEventListener('click', () => $('.receipt-panel').scrollIntoView({behavior: reducedMotion ? 'auto' : 'smooth', block:'center'}));
+    plusOne.append(count, message, jump);
+    plusOne.hidden = false;
+    toastTimer = setTimeout(() => { plusOne.hidden = true; }, 6500);
   }
 
   function fillModal(category) {
@@ -193,7 +226,7 @@
     $('[data-dialogue-next]').addEventListener('click', advanceDialogue);
     window.addEventListener('keydown', (event) => {
       if (intro.hidden || (event.key !== ' ' && event.key !== 'Enter')) return;
-      if (event.target instanceof HTMLElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) return;
+      if (event.repeat || event.target.closest('button, a, input, textarea, select, [contenteditable]')) return;
       event.preventDefault();
       advanceDialogue();
     });
@@ -203,6 +236,7 @@
       openCategory(data.categories.find((item) => item.id === button.dataset.category));
     });
     $('[data-modal-close]').addEventListener('click', () => modal.close());
+    modal.addEventListener('close', collectFinishedCategory);
     $('[data-checkout-close]').addEventListener('click', () => checkoutModal.close());
     $$('[data-back-cart]').forEach((button) => button.addEventListener('click', () => {
       modal.close();
