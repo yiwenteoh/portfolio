@@ -1,0 +1,40 @@
+.work-modal { width:min(1240px,calc(100% - 24px)); max-height:94dvh; background:#f9f3e3; scroll-padding-top:64px; }
+.work-modal>.modal-accent { display:none; }
+.work-modal>.modal-close { position:absolute; top:8px; right:12px; width:34px; height:34px; font-size:24px; }
+.work-content { clear:both; font-family:'DM Sans',sans-serif; color:#181818; background:linear-gradient(#213c6030 1px,transparent 1px),linear-gradient(90deg,#213c6030 1px,transparent 1px),#f9f3e3; background-size:30px 30px; }
+.work-nav { position:sticky; top:0; z-index:4; display:flex; justify-content:space-between; padding:14px 60px 14px 20px; border-bottom:2px solid; background:#ffc6d9; font-size:12px; font-weight:900; }
+.work-nav button { border:0; background:none; font-weight:900; cursor:pointer; }
+.work-hero { display:grid; grid-template-columns:1fr 155px; align-items:center; gap:30px; padding:clamp(32px,5vw,64px); border-bottom:3px solid; background:#fffdf8ef; }
+.work-hero p { margin:0; letter-spacing:.16em; font-size:11px; font-weight:900; }
+.work-hero h2 { max-width:850px; margin:10px 0 12px; font:400 clamp(42px,6vw,76px)/.95 'Lilita One',sans-serif; }
+.work-hero span { display:block; max-width:700px; font-size:16px; line-height:1.5; }
+.work-stamp { display:grid; place-content:center; width:135px; aspect-ratio:1; border:3px solid; border-radius:50%; background:var(--cyan); box-shadow:8px 8px 0; text-align:center; transform:rotate(5deg); font:400 25px/1 'Lilita One',sans-serif; }
+.work-timeline { display:grid; gap:28px; padding:clamp(24px,5vw,58px); }
+.work-card { position:relative; display:grid; grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr); gap:28px; padding:clamp(22px,4vw,38px); border:2px solid; background:#fff; box-shadow:7px 7px 0; overflow:hidden; }
+.work-card::before { content:""; position:absolute; inset:0 auto 0 0; width:9px; background:var(--work-color); border-right:2px solid; }
+.work-index { position:absolute; top:20px; right:24px; color:#20798a; font:400 42px/1 'Lilita One',sans-serif; }
+.work-copy { min-width:0; padding-left:5px; }
+.work-company { display:flex; align-items:flex-start; gap:15px; padding-right:58px; }
+.work-company>div:last-child { min-width:0; }
+.work-company p { margin:0 0 4px; font-size:12px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+.work-company h3 { margin:0; font:400 clamp(25px,3.2vw,42px)/1 'Lilita One',sans-serif; text-transform:uppercase; }
+.work-company span { display:block; margin-top:7px; font-size:12px; font-weight:700; }
+.work-logo { flex:0 0 84px; display:grid; place-content:center; width:84px; height:72px; padding:8px; border:2px solid; background:#fff; }
+.work-logo img { width:100%; height:100%; object-fit:contain; }
+.work-impacts { display:flex; flex-wrap:wrap; gap:10px; margin:20px 0 8px; }
+.work-impact { display:inline-flex; align-items:center; gap:12px; margin:0; padding:10px 13px; border:2px solid; background:var(--work-color); box-shadow:3px 3px 0; }
+.work-impact strong { font:400 28px/1 'Lilita One',sans-serif; white-space:nowrap; }
+.work-impact span { max-width:160px; font-size:9px; font-weight:900; line-height:1.2; text-transform:uppercase; }
+.work-card ul { margin:16px 0 0; padding-left:18px; font-size:13px; line-height:1.58; }
+.work-card li+li { margin-top:8px; }
+.work-photo { align-self:center; margin:0; padding:7px; border:2px solid; background:#fff; box-shadow:5px 5px 0 var(--work-color); transform:rotate(1deg); }
+.work-card:nth-child(even) .work-photo { transform:rotate(-1deg); }
+.work-photo img { display:block; width:100%; height:280px; object-fit:cover; }
+.work-card:nth-child(3) .work-photo img { object-position:center 35%; }
+.work-no-photo { align-self:center; display:grid; place-content:center; min-height:255px; padding:25px; border:3px solid; background:var(--work-color); box-shadow:7px 7px 0; text-align:center; transform:rotate(2deg); }
+.work-no-photo span { font:400 42px/.9 'Lilita One',sans-serif; }
+.work-no-photo small { max-width:210px; margin-top:14px; font-size:10px; font-weight:900; text-transform:uppercase; }
+.work-end { padding:10px 25px 50px; text-align:center; }
+.work-end button { padding:11px 20px; border:2px solid; border-radius:25px; background:var(--yellow); font-weight:900; cursor:pointer; }
+@media(max-width:800px){.work-card{grid-template-columns:1fr}.work-photo{width:min(100%,520px);justify-self:center}.work-no-photo{min-height:180px}.work-hero{grid-template-columns:1fr}.work-stamp{display:none}}
+@media(max-width:560px){.work-modal{width:calc(100% - 12px);box-shadow:3px 3px 0}.work-nav span{display:none}.work-hero{padding:28px 18px}.work-timeline{padding:24px 14px}.work-card{padding:22px 16px}.work-index{font-size:30px}.work-company{display:block}.work-logo{margin-bottom:12px}.work-photo img{height:auto;max-height:320px}.work-card ul{font-size:12px}}

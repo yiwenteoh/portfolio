@@ -18,6 +18,8 @@ All portfolio copy, contact details, category entries and image paths live in:
 
 `dist/portfolio-data.js`
 
+The first-page logo overview is configured in `quickHighlights`: edit each title, caption and logos array there. Brand sources and the supplied-logo background-removal notes are in `dist/assets/LOGO-SOURCES.md`. This preview has not been published.
+
 The file contains comments and obvious placeholders. Put your files in `dist/assets/`, then reference them with paths such as:
 
 - `assets/yiwen-manager.jpg`
@@ -35,6 +37,7 @@ The local `dist/assets/crowd-murmur.mp3` contains real CC0 crowd chatter, played
 
 - At the top: `siteName`, `managerPhoto`, `email`, `resumeUrl`, and the short `overviewTags` shown on the welcome screen.
 - Under `dialogue`: the two short introduction messages. Visitors can advance with the button or Space/Enter; the existing chatter asset gives each advance a brief conversational cue.
+- `managerTalkingSheet` uses the approved apron photo with a mouth-only cut-out animation. Replay line repeats the brief chatter and mouth movement; advancing starts the next line, and entering the store stops both. Reduced-motion users see the resting photo. Clear `managerTalkingSheet` to use `managerPhoto` instead. The proof's captions and second portrait are cropped out by CSS; only the mouth overlay changes.
 - Under `categories`: each section's `label`, `summary`, `metric`, and `image`.
 - Under `interests`: change the emoji and label for the little craft-inspired stickers beside the cart.
 - Under `quickLook`: change the introduction below the cart. The résumé and email links here are available without completing the cart.
@@ -56,3 +59,16 @@ If an image path is left blank, the site keeps a clearly labeled placeholder. Ca
 - `dist/styles.css` — colors, type, layout and motion.
 - `dist/app.js` — interactions, receipt progress and audio behavior.
 - `dist/assets/top-down-cart.png` — original generated cart artwork.
+
+## Mac visual editor
+
+Double-click `Start Portfolio Editor.command` in Finder. Keep the Terminal window open while editing. The editor opens only on this Mac and lets you:
+
+- edit the introduction, venture stories and cart-section copy;
+- upload main venture images;
+- change the site colours, image spacing and story width;
+- drag ventures and cart sections into a new order;
+- save and preview locally; and
+- publish the saved version to the existing Vercel project.
+
+This is a responsive section editor, not pixel-by-pixel positioning: that keeps the portfolio usable on phones. If macOS blocks the launcher the first time, Control-click it, choose **Open**, then confirm **Open**. The Publish button uses the Vercel login already configured on this Mac.

@@ -6,8 +6,13 @@
     <meta name="description" content="An interactive supermarket-inspired personal portfolio." />
     <meta name="theme-color" content="#ffc6d9" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23ffc6d9'/%3E%3Cpath d='M7 8h3l2 12h11l2-8H12M14 25h.1M22 25h.1' fill='none' stroke='%23181818' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E" />
-    <title>What's In My Cart? — Portfolio</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>YIWEN’S PORTFOLIO MART</title>
+    <link rel="stylesheet" href="styles.css?v=clean-header-7" />
+    <link rel="stylesheet" href="founders.css?v=venture-links-11" />
+    <link rel="stylesheet" href="education.css?v=education-logos-16" />
+    <link rel="stylesheet" href="work.css?v=work-images-2" />
+    <link rel="stylesheet" href="about.css?v=about-me-1" />
+    <link rel="stylesheet" href="projects.css?v=projects-1" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to portfolio</a>
@@ -16,8 +21,7 @@
 
     <header class="site-header" aria-label="Site controls">
       <button class="brand-mark" type="button" data-return-intro aria-label="Return to store entrance">
-        <span class="brand-dot"></span>
-        <span data-site-name>YI WEN'S MINI MART</span>
+        <img class="header-logo" data-header-logo src="assets/yiwen-logo-transparent.png" alt="Yiwen Portfolio Mart" />
       </button>
       <button class="radio-toggle" type="button" aria-pressed="false" data-radio>
         <span class="radio-light" aria-hidden="true"></span>
@@ -40,11 +44,21 @@
 
     <main id="main-content">
       <section class="intro-screen is-active" data-screen="intro" aria-labelledby="intro-title">
-        <div class="entrance-sign sticker-parallax" data-depth="0.35" aria-hidden="true">OPEN<br />DAILY</div>
-        <div class="cute-sticker" aria-hidden="true">♡ HI HI ♡</div>
+        <div class="intro-cart-backdrop" aria-hidden="true"><img src="assets/top-down-cart.png" alt="" /></div>
+        <div class="portfolio-overview" aria-label="Portfolio overview">
+          <div class="title-sign"><p class="intro-summary" data-site-name>YIWEN’S PORTFOLIO MART</p></div>
+          <p class="intro-inventory">Ventures · Work · Projects &amp; Creative · Education &amp; CCAs · Global · About me</p>
+          <button class="intro-skip" type="button" data-enter-cart>Explore the cart directly →</button>
+        </div>
+        <div class="interest-rail interest-left" data-interest-left aria-label="Creative interests"></div>
+        <div class="interest-rail interest-right" data-interest-right aria-label="More interests"></div>
         <div class="manager-stage">
           <div class="photo-frame">
             <img data-manager-photo alt="" />
+            <div class="manager-portrait" data-manager-portrait role="img" aria-label="Yi Wen wearing a sage store-manager apron" hidden>
+              <img class="manager-rest" data-manager-rest alt="" aria-hidden="true" />
+              <div class="manager-mouth" aria-hidden="true"><img data-manager-speaking alt="" /></div>
+            </div>
             <div class="photo-placeholder" data-photo-placeholder>
               <span>YOUR CASUAL PHOTO</span>
               <small>Replace in portfolio-data.js</small>
@@ -53,22 +67,15 @@
           </div>
 
           <div class="dialogue-panel">
-            <span class="welcome-bubble">WELCOME IN ♡</span>
-            <p class="eyebrow">A QUICK NOTE FROM YOUR STORE MANAGER</p>
             <h1 id="intro-title" data-dialogue-title>Hi, I'm Yi Wen.</h1>
             <p class="dialogue-copy" data-dialogue-copy>
               I'm your 2D store manager. Thanks for stopping by.
             </p>
             <div class="dialogue-controls">
-              <span class="dialogue-count" data-dialogue-count>01 / 02</span>
-              <span class="dialogue-hint">SPACE / ENTER</span>
-              <button class="primary-button" type="button" data-dialogue-next aria-label="Advance the introduction">Keep going <span aria-hidden="true">→</span></button>
+              <button class="secondary-button" type="button" data-dialogue-back>← Back</button>
+              <button class="primary-button" type="button" data-dialogue-next aria-label="Next introduction message">Next →</button>
             </div>
           </div>
-        </div>
-        <div class="portfolio-overview" aria-label="Portfolio overview">
-          <span class="overview-label">QUICK LOOK</span>
-          <div data-overview-tags></div>
         </div>
       </section>
 
@@ -84,8 +91,6 @@
 
         <div class="shop-layout">
           <section class="cart-zone" aria-label="Interactive portfolio cart">
-            <div class="interest-rail interest-left" data-interest-left aria-label="Creative interests"></div>
-            <div class="interest-rail interest-right" data-interest-right aria-label="More interests"></div>
             <div class="special-burst burst-cyan sticker-parallax" data-depth="0.55" aria-hidden="true">FRESH<br />WORK</div>
             <div class="special-burst burst-yellow sticker-parallax" data-depth="0.75" aria-hidden="true"><span data-find-count>9</span>FINDS</div>
             <div class="cart-scene">
@@ -170,8 +175,13 @@
       </div>
     </div>
 
-    <script src="portfolio-data.js"></script>
+    <script src="portfolio-data.js?v=projects-1"></script>
+    <script src="founders.js?v=venture-links-11"></script>
+    <script src="education.js?v=education-logos-16"></script>
+    <script src="work.js?v=work-images-2"></script>
+    <script src="about.js?v=about-me-1"></script>
+    <script src="projects.js?v=projects-1"></script>
     <script src="radio.js"></script>
-    <script src="app.js"></script>
+    <script src="app.js?v=projects-1"></script>
   </body>
 </html>

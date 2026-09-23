@@ -10,6 +10,7 @@
   let audioContext = null;
   let dialogueChatter = null;
   let chatterStopTimer = null;
+  let managerStopTimer = null;
   let activeCategory = null;
   let toastTimer = null;
   let openingCategory = false;
@@ -25,7 +26,28 @@
   const plusOne = $('[data-plus-one]');
 
   function init() {
+    const theme = data.theme || {};
+    const rootStyle = document.documentElement.style;
+    ['pink', 'sage', 'cyan', 'yellow'].forEach(key => {
+      if (/^#[0-9a-f]{6}$/i.test(theme[key] || '')) rootStyle.setProperty(`--${key}`, theme[key]);
+    });
+    if (Number.isFinite(theme.imageGap)) rootStyle.setProperty('--venture-image-gap', `${Math.max(0, Math.min(40, theme.imageGap))}px`);
+    if (Number.isFinite(theme.storyWidth)) rootStyle.setProperty('--venture-story-width', `${Math.max(560, Math.min(1100, theme.storyWidth))}px`);
     $$('[data-site-name]').forEach((el) => { el.textContent = data.siteName; });
+    $('[data-header-logo]').src = data.titleImage;
+    const title = $('.intro-summary');
+    title.replaceChildren(...(data.titleLines || [data.siteName]).map(line => {
+      const text = document.createElement('span'); text.textContent = line; return text;
+    }));
+    if (data.titleImage) {
+      const image = document.createElement('img');
+      image.src = data.titleImage;
+      image.alt = 'Yiwen Portfolio Mart';
+      image.width = 791; image.height = 299;
+      image.className = 'portfolio-title-art';
+      title.replaceChildren(image);
+      title.parentElement.classList.add('has-title-art');
+    }
     $('[data-today]').textContent = new Intl.DateTimeFormat('en', { month: 'short', day: '2-digit', year: 'numeric' }).format(new Date()).toUpperCase();
     $('[data-total]').textContent = data.categories.length;
     $('[data-find-count]').textContent = data.categories.length;
@@ -38,16 +60,35 @@
     });
     $('[data-quick-title]').textContent = data.quickLook.title;
     $('[data-quick-copy]').textContent = data.quickLook.copy;
-    data.interests.forEach((interest, index) => {
-      const icon = document.createElement('span');
-      icon.className = 'interest-sticker';
-      icon.setAttribute('role', 'img'); icon.setAttribute('aria-label', interest.label);
-      icon.title = interest.label; icon.textContent = interest.icon;
-      $(index < 2 ? '[data-interest-left]' : '[data-interest-right]').append(icon);
+    (data.quickHighlights || []).forEach((highlight, index) => {
+      const card = document.createElement('article'); card.className = 'logo-sticker';
+      if (highlight.logos.length > 1) card.classList.add('employer-sticker');
+      if (highlight.emoji) card.classList.add('global-sticker');
+      card.title = highlight.caption;
+      card.setAttribute('aria-label', `${highlight.title}: ${highlight.caption}`);
+      const logos = document.createElement('div'); logos.className = 'quick-logo-row';
+      if (highlight.emoji) {
+        const emoji = document.createElement('span'); emoji.className = 'global-emoji';
+        emoji.textContent = highlight.emoji; emoji.setAttribute('aria-hidden', 'true'); logos.append(emoji);
+      }
+      highlight.logos.forEach(logo => {
+        const item = document.createElement('div'); item.className = 'quick-logo';
+        const img = document.createElement('img'); img.src = logo.src; img.alt = logo.alt;
+        item.append(img);
+        if (logo.label) { const label = document.createElement('small'); label.textContent = logo.label; item.append(label); }
+        logos.append(item);
+      });
+      const title = document.createElement('h2'); title.textContent = highlight.title;
+      card.append(logos, title);
+      $(index < 2 ? '[data-interest-left]' : '[data-interest-right]').append(card);
     });
-    $('[data-overview-tags]').innerHTML = (data.overviewTags || []).slice(0, 4).map((tag) => `<span>${tag}</span>`).join('');
 
-    if (data.managerPhoto) {
+    if (data.managerTalkingSheet) {
+      $('[data-manager-rest]').src = data.managerTalkingSheet;
+      $('[data-manager-speaking]').src = data.managerTalkingSheet;
+      $('[data-manager-portrait]').hidden = false;
+      $('[data-photo-placeholder]').hidden = true;
+    } else if (data.managerPhoto) {
       const image = $('[data-manager-photo]');
       image.src = data.managerPhoto;
       image.alt = 'Yi Wen, store manager of this portfolio';
@@ -65,15 +106,22 @@
     const step = data.dialogue[dialogueIndex];
     $('[data-dialogue-title]').textContent = step.title;
     $('[data-dialogue-copy]').textContent = step.copy;
-    $('[data-dialogue-count]').textContent = `${String(dialogueIndex + 1).padStart(2, '0')} / ${String(data.dialogue.length).padStart(2, '0')}`;
-    $('[data-dialogue-next]').innerHTML = dialogueIndex === data.dialogue.length - 1
-      ? 'Proceed <span aria-hidden="true">→</span>'
-      : 'Keep going <span aria-hidden="true">→</span>';
+    $('[data-dialogue-back]').disabled = dialogueIndex === 0;
+    $('[data-dialogue-next]').textContent = 'Next →';
+    $('[data-dialogue-next]').setAttribute('aria-label', dialogueIndex === data.dialogue.length - 1 ? 'Next: enter the cart' : 'Next introduction message');
   }
 
   // Reuse the existing chatter asset for a brief, user-triggered conversational cue.
   // The Store Radio implementation remains unchanged and still owns continuous ambience.
   function playDialogueChatter() {
+    stopManagerSpeech();
+    const portrait = $('[data-manager-portrait]');
+    if (!reducedMotion && !portrait.hidden) {
+      // Restart the short mouth-only sprite animation on each deliberate replay.
+      void portrait.offsetWidth;
+      portrait.classList.add('is-speaking');
+      managerStopTimer = setTimeout(() => portrait.classList.remove('is-speaking'), 850);
+    }
     if (!data.audio?.chatter) return;
     dialogueChatter ||= new Audio(data.audio.chatter);
     dialogueChatter.volume = Math.min(Number(data.audio.chatterVolume || 0.055), 0.12);
@@ -81,6 +129,13 @@
     clearTimeout(chatterStopTimer);
     dialogueChatter.play().catch(() => {});
     chatterStopTimer = window.setTimeout(() => dialogueChatter.pause(), 850);
+  }
+
+  function stopManagerSpeech() {
+    clearTimeout(managerStopTimer);
+    clearTimeout(chatterStopTimer);
+    $('[data-manager-portrait]').classList.remove('is-speaking');
+    dialogueChatter?.pause();
   }
 
   function renderItems() {
@@ -112,6 +167,7 @@
   }
 
   function enterShop() {
+    stopManagerSpeech();
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     playStoreBell();
     intro.classList.remove('is-active');
@@ -159,6 +215,53 @@
   }
 
   function fillModal(category) {
+    const isFounder = category.id === 'entrepreneurship';
+    const isEducation = category.id === 'education';
+    const isWork = category.id === 'work';
+    const isAbout = category.id === 'about';
+    const isProjects = category.id === 'projects';
+    modal.classList.toggle('founder-modal', isFounder);
+    modal.classList.toggle('education-modal', isEducation);
+    modal.classList.toggle('work-modal', isWork);
+    modal.classList.toggle('about-modal', isAbout);
+    modal.classList.toggle('projects-modal', isProjects);
+    modal.querySelector('.modal-body').hidden = isFounder || isEducation || isWork || isAbout || isProjects;
+    let aisle = modal.querySelector('.founder-content');
+    if (aisle) aisle.remove();
+    let education = modal.querySelector('.education-content');
+    if (education) education.remove();
+    let work = modal.querySelector('.work-content');
+    if (work) work.remove();
+    let about = modal.querySelector('.about-content');
+    if (about) about.remove();
+    let projects = modal.querySelector('.projects-content');
+    if (projects) projects.remove();
+    modal.setAttribute('aria-labelledby', isFounder ? 'founder-title' : isEducation ? 'education-title' : isWork ? 'work-title' : isAbout ? 'about-title' : isProjects ? 'projects-title' : 'modal-title');
+    if (isFounder) {
+      modal.append(window.renderFoundersAisle(data.ventures, () => modal.close()));
+      modal.scrollTop = 0;
+      return;
+    }
+    if (isEducation) {
+      modal.append(window.renderEducation(data.education, () => modal.close()));
+      modal.scrollTop = 0;
+      return;
+    }
+    if (isWork) {
+      modal.append(window.renderWorkExperience(data.workExperience, () => modal.close()));
+      modal.scrollTop = 0;
+      return;
+    }
+    if (isAbout) {
+      modal.append(window.renderAboutMe(data.aboutMe, data.managerTalkingSheet, () => modal.close()));
+      modal.scrollTop = 0;
+      return;
+    }
+    if (isProjects) {
+      modal.append(window.renderProjectsCreative(data.projectsCreative, () => modal.close()));
+      modal.scrollTop = 0;
+      return;
+    }
     $('[data-modal-accent]').style.background = category.color;
     $('[data-modal-number]').textContent = String(data.categories.findIndex((item) => item.id === category.id) + 1).padStart(2, '0');
     $('[data-modal-tag]').textContent = category.tag;
@@ -217,12 +320,19 @@
 
   function wireEvents() {
     const advanceDialogue = () => {
-      playDialogueChatter();
       if (dialogueIndex < data.dialogue.length - 1) {
         dialogueIndex += 1;
         renderDialogue();
+        playDialogueChatter();
       } else enterShop();
     };
+    $('[data-dialogue-back]').addEventListener('click', () => {
+      if (dialogueIndex > 0) { dialogueIndex -= 1; renderDialogue(); playDialogueChatter(); }
+    });
+    $('[data-enter-cart]').addEventListener('click', enterShop);
+    // Sound begins only after a deliberate interaction, never forced autoplay.
+    intro.addEventListener('pointerdown', () => { playStoreBell(); }, { once: true });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stopManagerSpeech(); });
     $('[data-dialogue-next]').addEventListener('click', advanceDialogue);
     window.addEventListener('keydown', (event) => {
       if (intro.hidden || (event.key !== ' ' && event.key !== 'Enter')) return;
@@ -247,6 +357,9 @@
     checkoutButton.addEventListener('click', () => { playBeep(); checkoutModal.showModal(); });
     $('[data-radio]').addEventListener('click', () => window.StoreRadio.toggle());
     $$('[data-return-intro]').forEach((button) => button.addEventListener('click', () => {
+      stopManagerSpeech();
+      dialogueIndex = 0;
+      renderDialogue();
       shop.hidden = true;
       intro.hidden = false;
       intro.classList.add('is-active');
