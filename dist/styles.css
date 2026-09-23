@@ -195,8 +195,8 @@ dialog button, dialog a { cursor: pointer; }
   content: "YIWEN";
   position: absolute;
   z-index: 3;
-  left: 70.5%;
-  top: 88.4%;
+  left: 64%;
+  top: 86.6%;
   display: grid;
   place-items: center;
   width: 76px;
