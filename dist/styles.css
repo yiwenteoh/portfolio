@@ -191,6 +191,24 @@ dialog button, dialog a { cursor: pointer; }
 .photo-placeholder[hidden] { display: none; }
 .manager-portrait { position: absolute; inset: 0; overflow: hidden; }
 .manager-portrait[hidden] { display: none; }
+.manager-portrait::after {
+  content: "YIWEN";
+  position: absolute;
+  z-index: 3;
+  left: 70.5%;
+  top: 88.4%;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 35px;
+  border: 2px solid #3b3030;
+  border-radius: 50%;
+  background: #f5a9bd;
+  color: #302626;
+  font: 700 14px/1 'DM Sans', sans-serif;
+  letter-spacing: .02em;
+  transform: rotate(-1deg);
+}
 /* Crop the approved 1536 × 1024 proof in CSS; never stretch the face.
    Left photo: x15..759, y0..950. Right mouth is the only moving layer. */
 .photo-frame:has(.manager-portrait:not([hidden])) { aspect-ratio: 744 / 950; }

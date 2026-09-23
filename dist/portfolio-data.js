@@ -16,7 +16,7 @@ window.PORTFOLIO_DATA = {
   "titleImage": "assets/yiwen-logo-transparent.png",
   "managerPhoto": "",
   "managerTalkingSheet": "assets/manager-speaking-sheet.png",
-  "resumeUrl": "#",
+  "resumeUrl": "assets/yiwen-resume.pdf",
   "email": "hello@example.com",
   "quickHighlights": [
     {
