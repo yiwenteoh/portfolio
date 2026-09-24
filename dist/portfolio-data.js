@@ -88,7 +88,7 @@ window.PORTFOLIO_DATA = {
     },
     {
       "title": "A portfolio you can play.",
-      "copy": "My cart holds six little stories. Start with my ventures, then pick whatever catches your eye. Let's explore."
+      "copy": "My cart holds five little stories. Start with my ventures, then pick whatever catches your eye. Let's explore."
     }
   ],
   "audio": {
