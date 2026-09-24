@@ -1,5 +1,7 @@
 .sites-runtime/
-work/
+/work/
+dist/assets/work/foodpanda-team.jpg
+dist/assets/work/shopee-team.jpg
 *.tar.gz
 .DS_Store
 .vercel/

@@ -13,6 +13,7 @@
   musicOutput.value = `${config.musicVolume}%`;
   chatterVolume.value = config.chatterVolume * 100;
   let wanted = false;
+  let userActivated = false;
   let player;
   let ready = false;
   let loading;
@@ -25,6 +26,12 @@
   let activeGain;
   let chatterLevel = config.chatterVolume;
   let playing = false;
+  const ambientBed = config.chatter ? new Audio(config.chatter) : null;
+  if (ambientBed) {
+    ambientBed.loop = true;
+    ambientBed.preload = 'auto';
+    ambientBed.volume = chatterLevel;
+  }
 
   function label(text) {
     toggle.setAttribute('aria-pressed', String(wanted));
@@ -41,11 +48,24 @@
     }
   }
 
+  function stopAmbience() {
+    if (!ambientBed) return;
+    ambientBed.pause();
+    ambientBed.currentTime = 0;
+  }
+
+  function startAmbience() {
+    if (!ambientBed || !wanted || chatterLevel <= 0) return Promise.resolve(false);
+    ambientBed.volume = chatterLevel;
+    return ambientBed.play().then(() => true).catch(() => false);
+  }
+
   function stop() {
     wanted = false;
     playing = false;
     clearTimeout(loadTimer);
     stopChatter();
+    stopAmbience();
     if (ready) player.pauseVideo();
     panel.hidden = true;
     video.hidden = true;
@@ -114,12 +134,30 @@
     return loading;
   }
 
-  async function start() {
+  function unlockRadio() {
+    userActivated = true;
+    context?.resume?.().catch(() => {});
+    if (wanted) {
+      startAmbience().then(active => {
+        if (active && wanted && !playing) {
+          clearTimeout(loadTimer);
+          label('ON');
+          status.textContent = 'Store ambience is playing softly. Music will join when available.';
+        }
+      });
+    }
+    if (wanted && ready) player.playVideo();
+  }
+
+  document.addEventListener('pointerdown', unlockRadio, { once: true, capture: true });
+  document.addEventListener('keydown', unlockRadio, { once: true, capture: true });
+
+  async function start(showPanel = true) {
     wanted = true;
-    panel.hidden = false;
+    panel.hidden = !showPanel;
     label('LOADING');
     status.textContent = 'Loading your track…';
-    prepareChatter();
+    startAmbience();
     clearTimeout(loadTimer);
     loadTimer = setTimeout(() => {
       if (wanted && !playing) {
@@ -150,14 +188,21 @@
             if (playing) {
               clearTimeout(loadTimer);
               label('ON'); status.textContent = 'Now playing · occasional soft chatter';
-              scheduleChatter(true);
+              startAmbience();
             } else {
               stopChatter();
               label(event.data === 2 ? 'PAUSED' : 'LOADING');
               status.textContent = event.data === 2 ? 'Music paused. Show player to resume.' : 'Music loading…';
             }
           },
-          onAutoplayBlocked() { if (wanted) { label('PLAY'); status.textContent = 'Choose Show player and press Play once. You can hide it afterwards.'; } },
+          onAutoplayBlocked() {
+            if (!wanted) return;
+            clearTimeout(loadTimer);
+            label(userActivated ? 'PLAY' : 'READY');
+            status.textContent = userActivated
+              ? 'Choose Show player and press Play once. You can hide it afterwards.'
+              : 'Radio ready — tap or click anywhere to start it.';
+          },
           onError() { fail('YouTube could not play this track here. Try the YouTube link below, or switch Store Radio on to retry.'); }
         }
       });
@@ -170,18 +215,20 @@
   });
   chatterVolume.addEventListener('input', () => {
     chatterLevel = Number(chatterVolume.value) / 100;
-    stopChatter(); scheduleChatter(true);
+    if (ambientBed) ambientBed.volume = chatterLevel;
+    if (chatterLevel > 0) startAmbience(); else stopAmbience();
   });
   document.querySelector('[data-radio-close]').addEventListener('click', () => { panel.hidden = true; toggle.focus(); });
   document.querySelector('[data-radio-stop]').addEventListener('click', stop);
   document.querySelector('[data-radio-player]').addEventListener('click', () => { video.hidden = !video.hidden; });
   document.querySelector('[data-video-close]').addEventListener('click', () => { video.hidden = true; });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stopChatter(); else scheduleChatter();
+    if (document.hidden) ambientBed?.pause(); else if (wanted) startAmbience();
   });
   window.addEventListener('pagehide', stop);
   window.StoreRadio = { toggle: () => {
     if (!wanted) start();
     else panel.hidden = !panel.hidden;
   } };
+  start(false);
 })();

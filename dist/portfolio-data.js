@@ -93,9 +93,9 @@ window.PORTFOLIO_DATA = {
   ],
   "audio": {
     "youtubeId": "vxPrlc2rtuk",
-    "musicVolume": 22,
+    "musicVolume": 12,
     "chatter": "assets/crowd-murmur.mp3",
-    "chatterVolume": 0.055,
+    "chatterVolume": 0.03,
     "chatterGap": [
       18,
       35
@@ -660,7 +660,7 @@ window.PORTFOLIO_DATA = {
         "role": "Top Creator and MCN Projects Intern",
         "date": "Aug 2026 – Nov 2026 (Expected)",
         "logo": "assets/TikTok-logo-RGB-Horizontal-black.png",
-        "image": "assets/work/tiktok-bytedance-team.jpg",
+        "image": "assets/work/tiktok-bytedance-team.jpg?v=1",
         "color": "#a8edf0",
         "metric": "4+ HOURS → ~5 MIN",
         "metricLabel": "Manual creator operations automated",
@@ -682,7 +682,7 @@ window.PORTFOLIO_DATA = {
         "role": "Business Development Intern",
         "date": "May 2026 – Jul 2026",
         "logo": "assets/shopee-logo.svg",
-        "image": "assets/work/shopee-portrait.jpg",
+        "image": "assets/work/shopee-portrait.jpg?v=1",
         "color": "#ffd8ce",
         "metric": "−83%",
         "metricLabel": "Competitor-analysis time",
@@ -703,7 +703,7 @@ window.PORTFOLIO_DATA = {
         "role": "Retail Media and Partnerships Intern",
         "date": "Apr 2025 – Aug 2025",
         "logo": "assets/foodpanda-logo.svg",
-        "image": "assets/work/foodpanda-team-panda.png",
+        "image": "assets/work/foodpanda-team-panda.png?v=1",
         "color": "#ffc6d9",
         "metric": "US$1M+",
         "metricLabel": "Multi-market partnership campaigns",
@@ -724,7 +724,7 @@ window.PORTFOLIO_DATA = {
         "role": "Marketing and Partnerships Intern",
         "date": "Sep 2024 – Feb 2025",
         "logo": "assets/work/holicay-logo.jpg",
-        "image": "assets/work/holicay-team.jpg",
+        "image": "assets/work/holicay-team.jpg?v=1",
         "color": "#f8ef65",
         "metrics": [
           [
