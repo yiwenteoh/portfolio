@@ -987,24 +987,6 @@ window.PORTFOLIO_DATA = {
       ]
     },
     {
-      "id": "global",
-      "label": "Global Experiences / NOC",
-      "shortLabel": "GLOBAL",
-      "icon": "✈️",
-      "color": "#c7d9a7",
-      "tag": "AISLE 06",
-      "metric": "NEW CITIES · NEW LENSES",
-      "summary": "Experiences that stretched my worldview and how I work across cultures.",
-      "image": "",
-      "entries": [
-        {
-          "title": "NOC / Global experience",
-          "meta": "CITY · YEAR",
-          "text": "Add the venture, community or perspective that shaped you."
-        }
-      ]
-    },
-    {
       "id": "about",
       "label": "About Me",
       "shortLabel": "ABOUT",

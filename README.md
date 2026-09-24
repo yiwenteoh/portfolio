@@ -46,7 +46,7 @@ The local `dist/assets/crowd-murmur.mp3` contains real CC0 crowd chatter, played
 
 Edit the words inside quotation marks, save the file, then refresh the preview. Keep surrounding commas and brackets. Image paths are relative to the `dist` folder: an image saved as `dist/assets/my-venture.jpg` is written as `"assets/my-venture.jpg"` in the content file.
 
-The cart has six categories: Entrepreneurship, Work Experience, Projects & Creative, Education, Global Experiences, and About Me. Creative work and hackathons are entries within Projects & Creative. A section is collected when visitors close its window or use Back to cart; opening it again does not add it twice. A visible +1 notice and highlighted receipt row confirm each new addition. Receipt totals update automatically, and the entrance button returns to the store-manager introduction. The normal pointer remains visible inside all dialogs.
+The cart has five categories: Entrepreneurship, Work Experience, Projects & Creative, Education, and About Me. Creative work and hackathons are entries within Projects & Creative. A section is collected when visitors close its window or use Back to cart; opening it again does not add it twice. A visible +1 notice and highlighted receipt row confirm each new addition. Receipt totals update automatically, and the entrance button returns to the store-manager introduction. The normal pointer remains visible inside all dialogs.
 
 The résumé is a link below the cart, not another category to unlock. Add your PDF to `dist/assets/` and set `resumeUrl` to `"assets/yiwen-resume.pdf"`. Until you replace the `"#"` placeholder, the link says “Résumé coming soon”. Replace the placeholder email before sharing the finished portfolio.
 
