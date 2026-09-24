@@ -95,7 +95,7 @@ window.PORTFOLIO_DATA = {
     "youtubeId": "vxPrlc2rtuk",
     "musicVolume": 12,
     "chatter": "assets/crowd-murmur.mp3",
-    "chatterVolume": 0.03,
+    "chatterVolume": 0.01,
     "chatterGap": [
       18,
       35
