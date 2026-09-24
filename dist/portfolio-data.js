@@ -854,22 +854,36 @@ window.PORTFOLIO_DATA = {
       },
       {
         "id": "orbital",
-        "name": "ORBITAL",
-        "headline": "NUS Orbital",
-        "achievement": "COMING SOON",
-        "event": "NUS Orbital",
-        "tags": ["Build in progress"],
-        "placeholder": true
+        "name": "CARTPOOL",
+        "headline": "Overseas group buying, made easier.",
+        "achievement": "NUS ORBITAL · TEAM 6695",
+        "event": "NUS Orbital 2026",
+        "tags": ["React", "Supabase", "Node.js", "MySQL", "Vercel"],
+        "hero": "assets/projects/orbital-cartpool-poster.png",
+        "heroAlt": "CartPool NUS Orbital project poster",
+        "coverFit": "contain",
+        "overview": "CartPool is a group-buying platform for overseas shopping. It helps people combine orders, reach shared purchase targets and follow each group buy from discovery to delivery—all in one clearer, more trustworthy flow.",
+        "problem": "Buying from overseas brands can mean high shipping fees, minimum-order requirements and free-shipping thresholds that are difficult to reach alone. Informal group buys on messaging and social platforms can also be fragmented, unclear and difficult to track.",
+        "built": ["Create, discover and join group buys", "Dynamic thresholds and pricing as more members join", "Automated group-buy lifecycle from creation to delivery", "Fair shipping-cost allocation based on each member's share", "Profiles, chat and issue reporting to support safer transactions"],
+        "contribution": "Worked with a teammate to take CartPool from problem definition to a functional web product. I contributed across product design, user flows, interface iteration and implementation, then translated user feedback into clearer navigation, stronger cost transparency and more trust between participants.",
+        "outcome": "Built and deployed an end-to-end group-buying experience through NUS Orbital. Evaluation surfaced three priorities—navigation, price transparency and user trust—which we addressed through a clearer header and dashboard, shared-shipping calculations, currency conversion, user profiles, chat and issue reporting.",
+        "steps": ["Sign up or log in.", "Browse available group buys.", "Create or join a shared purchase.", "Track the target until the order closes.", "Follow fulfilment through receiving and completion."],
+        "gallery": [
+          {"src":"assets/projects/orbital-cartpool-poster.png","alt":"CartPool project poster explaining the problem, solution, flow, evaluation and technology stack","label":"NUS ORBITAL · CARTPOOL PROJECT POSTER"}
+        ],
+        "videoEmbedUrl": "https://drive.google.com/file/d/1nM9coAj0S5t_fmPGMmoE9DBmK38ror3N/preview",
+        "videoUrl": "https://drive.google.com/file/d/1nM9coAj0S5t_fmPGMmoE9DBmK38ror3N/view",
+        "videoLabel": "Watch the CartPool product demo"
       }
     ],
     "communities": {
       "title": "Building Entrepreneurial Communities",
       "subtitle": "Creating spaces for people to meet, build and start.",
       "events": [
-        {"title":"Founder / Networking Speed Dating","copy":"A fast-paced networking experience designed to help participants meet and connect with new people."},
-        {"title":"SPARK-UP","copy":"An entrepreneurship bazaar bringing together student entrepreneurs to showcase and sell their products while raising funds for the Student Aid Fund."},
-        {"title":"Student Entrepreneur Gatherings","copy":"Events bringing together student founders and aspiring entrepreneurs to meet, exchange ideas and build connections."},
-        {"title":"Community Bonding Days","copy":"Community-building experiences designed to strengthen relationships among members."}
+        {"title":"Student Entrepreneur Gatherings","copy":"Events bringing together student founders and aspiring entrepreneurs to meet, exchange ideas and build connections across campuses and markets.","image":"assets/projects/events/student-entrepreneur-gatherings.png","imageAlt":"Student founders at the KU–NUS Student Founders Exchange"},
+        {"title":"Community Bonding Days","copy":"A community bonding day I organised at Sentosa to help members strengthen friendships beyond our usual entrepreneurship events.","image":"assets/projects/events/community-bonding-sentosa.png","imageAlt":"Community bonding day organised at Sentosa"},
+        {"title":"Founder / Networking Speed Dating","copy":"A fast-paced networking experience designed to help participants meet, exchange perspectives and form new founder connections."},
+        {"title":"SPARK-UP","copy":"An entrepreneurship bazaar bringing together student entrepreneurs to showcase and sell their products while raising funds for the Student Aid Fund.","image":"assets/projects/events/spark-up.png","imageAlt":"Student entrepreneurs showcasing products at SPARK-UP"}
       ]
     },
     "creative": {
