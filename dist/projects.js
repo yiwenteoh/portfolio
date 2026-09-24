@@ -16,7 +16,7 @@ window.renderProjectsCreative = function (content, close) {
       <figure><img src="${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy"><figcaption>${esc(image.label)}</figcaption></figure>`).join('');
     const steps = project.steps ? `<section class="project-process"><h5>How it works</h5><ol>${project.steps.map(step => `<li>${esc(step)}</li>`).join('')}</ol></section>` : '';
     const roadmap = project.roadmap ? `<section class="project-roadmap"><h5>Future product roadmap</h5><div>${project.roadmap.map((step, i) => `<span>${esc(step)}${i < project.roadmap.length - 1 ? '<b>→</b>' : ''}</span>`).join('')}</div></section>` : '';
-    const video = project.videoEmbedUrl ? `<section class="project-video-player"><h5>${esc(project.videoLabel)}</h5><div><iframe src="${esc(project.videoEmbedUrl)}" title="${esc(project.videoLabel)}" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe></div><a href="${esc(project.videoUrl)}" target="_blank" rel="noopener noreferrer">Open the demo in Google Drive ↗</a></section>` : `<button class="project-video" type="button" disabled>${esc(project.videoLabel)} ↗</button>`;
+    const video = project.videoEmbedUrl ? `<section class="project-video-player"><h5>${esc(project.videoLabel)}</h5><div><iframe src="${esc(project.videoEmbedUrl)}" title="${esc(project.videoLabel)}" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe></div><a href="${esc(project.videoUrl)}" target="_blank" rel="noopener noreferrer">Open the demo in Google Drive ↗</a></section>` : '';
     return `
       <details class="project-card" data-project-card>
         <summary>

@@ -828,8 +828,7 @@ window.PORTFOLIO_DATA = {
         "gallery": [
           {"src":"assets/projects/orca-ate-poster.jpg","alt":"ORCA-ATE project poster","label":"PROJECT POSTER"},
           {"src":"assets/projects/orca-ate-team.jpg","alt":"ORCA-ATE team photograph","label":"TEAM AT IDEATE 2025"}
-        ],
-        "videoLabel": "Watch pitch · coming soon"
+        ]
       },
       {
         "id": "onz",
@@ -849,8 +848,7 @@ window.PORTFOLIO_DATA = {
           {"src":"assets/projects/onz-team.png","alt":"ONZ hackathon team with organisers","label":"CROSS-CULTURAL TEAM"},
           {"src":"assets/projects/onz-award.png","alt":"ONZ Most Scalable Idea award","label":"AWARD"},
           {"src":"assets/projects/onz-pitch.png","alt":"ONZ team pitching on stage","label":"PITCHING IN HO CHI MINH CITY"}
-        ],
-        "videoLabel": "Watch pitch · coming soon"
+        ]
       },
       {
         "id": "orbital",
