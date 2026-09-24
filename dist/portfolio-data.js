@@ -886,8 +886,11 @@ window.PORTFOLIO_DATA = {
     },
     "creative": {
       "title": "Creative Work",
-      "subtitle": "Campaigns, posters, event branding and marketing work—more coming soon.",
-      "placeholders": ["Campaigns", "Posters", "Event Branding", "Marketing Work"]
+      "subtitle": "Selected marketing, partnerships and visual work.",
+      "headline": "Marketing & Partnerships Works",
+      "copy": "Explore campaign results, social media work, video editing, event marketing, design and product photography in my dedicated creative portfolio.",
+      "tags": ["Campaigns", "Social Media", "Video Editing", "Design & Photography"],
+      "url": "https://yiwenmktworks.my.canva.site/yiwen-marketing-portfolio"
     }
   },
   "categories": [
