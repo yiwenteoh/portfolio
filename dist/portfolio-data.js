@@ -880,7 +880,7 @@ window.PORTFOLIO_DATA = {
       "events": [
         {"title":"Student Entrepreneur Gatherings","copy":"Events bringing together student founders and aspiring entrepreneurs to meet, exchange ideas and build connections across campuses and markets.","image":"assets/projects/events/student-entrepreneur-gatherings.png","imageAlt":"Student founders at the KU–NUS Student Founders Exchange"},
         {"title":"Community Bonding Days","copy":"A community bonding day I organised at Sentosa to help members strengthen friendships beyond our usual entrepreneurship events.","image":"assets/projects/events/community-bonding-sentosa.png","imageAlt":"Community bonding day organised at Sentosa"},
-        {"title":"Founder / Networking Speed Dating","copy":"A fast-paced networking experience designed to help participants meet, exchange perspectives and form new founder connections."},
+        {"title":"Founder / Networking Speed Dating","copy":"A fast-paced networking experience designed to help participants meet, exchange perspectives and form new founder connections.","image":"assets/projects/events/founder-networking-speed-dating.png","imageAlt":"Participants at the founder and networking speed dating event"},
         {"title":"SPARK-UP","copy":"An entrepreneurship bazaar bringing together student entrepreneurs to showcase and sell their products while raising funds for the Student Aid Fund.","image":"assets/projects/events/spark-up.png","imageAlt":"Student entrepreneurs showcasing products at SPARK-UP"}
       ]
     },
