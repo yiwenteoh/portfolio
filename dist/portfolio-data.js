@@ -463,6 +463,8 @@ window.PORTFOLIO_DATA = {
         "subtitle": "Connecting student founders across campuses",
         "label": "FOUNDER ECOSYSTEM",
         "logo": "",
+        "image": "assets/education/collective-ku-nus-founder-exchange.png?v=1",
+        "mediaLayout": "side",
         "metrics": [],
         "bullets": [
           "Building a community that connects student founders across campuses, fostering collaboration and relationships within the wider startup ecosystem.",
